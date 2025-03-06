@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>Edit Client</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<header style="background-color: #749FC7 !important;">
+    <!-- <h1>TechStile</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'clients_list' %}">Clients</a></li>
+            <li><a href="{% url 'feature_list' %}">Features</a></li>
+        </ul>
+    </nav> -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Feature Operations</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'clients_list' %}">Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'feature_list' %}">Features</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<body>
+    <h1>Edit Client</h1>
+    <form method="post" action="{% url 'edit_client' client.id %}">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ client.name }}" required><br><br>
+
+        <label for="active">Active:</label>
+        <input type="checkbox" id="active" name="active" {% if client.active %}checked{% endif %}><br><br>
+
+        <label for="lot_prefix">Lot Prefix:</label>
+        <input type="text" id="lot_prefix" name="lot_prefix" value="{{ client.lot_prefix }}" required><br><br>
+
+        <label for="username_prefix_code">Username Prefix Code:</label>
+        <input type="text" id="username_prefix_code" name="username_prefix_code" value="{{ client.username_prefix_code }}" required><br><br>
+
+        <label for="dispatch_date_freeze">Dispatch Date Freeze:</label>
+        <input type="date" id="dispatch_date_freeze" name="dispatch_date_freeze" value="{{ client.dispatch_date_freeze|date:'Y-m-d' }}" required><br><br>
+
+        <label for="formal_name">Formal Name:</label>
+        <input type="text" id="formal_name" name="formal_name" value="{{ client.formal_name }}" required><br><br>
+
+        <input type="submit" value="Save Changes">
+    </form>
+</body>
+<footer>
+    <p></p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+<footer class="bg-light text-center text-lg-start mt-5">
+<!-- <div class="container p-4">
+    <div class="row">
+        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+            <h5 class="text-uppercase">TechStile</h5>
+            <p>
+                Coming from several years of experience in the traditional textile industry in India, we faced a barrage of problems when it came to inventory management and operational procedures, and we observed that this set of problems are proving to be a great barrier for organizations to grow and scale up. It is a highly unorganized industry.
+
+This is a $200 billion industry, and about 60% of it remains unorganized. Use of technology has not yet been made commonplace, and this has led to organizations operating at a lower than optimal efficiency rate. Also, the new taxation laws have made it even more difficult for organizations, and level of human errors has been on massive scale.
+
+At Ace Enterprise Solutions, we not only understand the issues plaguing this industry, but we deeply care about it too. With years of experience in the industry, we understand the organizational needs, and we have set out to fill this huge technological gap that exists today. We wish to solve this problem and help this industry grow beyond what it is today.
+
+Our ERP systems are innovative, robust, reliable, and truly best in class, and we intend to enable businesses to simplify and organize this sector, thereby boosting operational efficiency, better supply chain management, and enabling organizations to grow their business further. We have firmly placed our intentions to solely help businesses grow.
+            </p>
+        </div>
+        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Links</h5>
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <a href="{% url 'index' %}" class="text-dark">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'clients_list' %}" class="text-dark">Clients</a>
+                </li>
+                <li>
+                    <a href="{% url 'feature_list' %}" class="text-dark">Features</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div> -->
+<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2025 Aditya Chaudhary
+</div>
+</footer>
+</html>

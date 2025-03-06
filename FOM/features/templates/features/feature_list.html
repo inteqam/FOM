@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        .feature-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .feature-buttons {
+            display: flex;
+        }
+        .button-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            background-color: blue;
+            color: white;
+        }
+        #refreshBtn {
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: blue;
+            color: white;
+            margin-left: auto;
+        }
+        .table-wrapper {
+            position: relative;
+            overflow-x: auto;
+            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 400px; /* Set the max height for the table container */
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0; /* Stick header to the top */
+            z-index: 1; /* Ensure header stays above content */
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .hidden {
+            display: none;
+        }
+        
+    
+        .text-center {
+            background-color: rgba(0, 0, 0, 0.2) !important;
+            padding: 10px;
+            color: #f8f9fa;
+        }
+    </style>
+
+    <div class="feature-container">
+        <div class="feature-buttons">
+            <!-- <button type="button" id="blankPageBtn">Feature Operations</button> -->
+            <button type="button" id="featureOpsBtn">Feature Description Update</button>
+        </div>
+        <button id="refreshBtn" onclick="window.location.reload();"><i class="fas fa-sync-alt"></i></button>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Default Value</th>
+                    <th>Value Type</th>
+                    <th>Description</th>
+                    <th class="actions hidden">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feature in features %}
+                <tr data-id="{{ feature.id }}">
+                    <td>{{ feature.name }}</td>
+                    <td>{{ feature.default_value }}</td>
+                    <td>{{ feature.value_type }}</td>
+                    <td class="description">
+                        <span class="desc-text">{{ feature.description }}</span>
+                        <input type="text" class="form-control edit-input hidden" value="{{ feature.description }}">
+                        <button class="btn btn-success btn-sm save-btn hidden mt-1">Save</button>
+                    </td>
+                    <td class="actions hidden">
+                        <button type="button" class="btn btn-warning btn-sm edit-btn"><i class="fas fa-pencil-alt"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+     
+    <script>
+        document.getElementById('featureOpsBtn').addEventListener('click', function() {
+            var actionCells = document.querySelectorAll('.actions');
+            actionCells.forEach(function(cell) {
+                cell.classList.toggle('hidden');
+            });
+            this.classList.toggle('active');
+        });
+
+        // document.getElementById('blankPageBtn').addEventListener('click', function() {
+        //     window.location.href = '{% url "blank_page_url" %}';
+        // });
+
+        document.querySelectorAll('.edit-btn').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                var row = this.closest('tr');
+                var descriptionCell = row.querySelector('.description');
+                descriptionCell.querySelector('.desc-text').classList.add('hidden');
+                descriptionCell.querySelector('.edit-input').classList.remove('hidden');
+                descriptionCell.querySelector('.save-btn').classList.remove('hidden');
+                descriptionCell.querySelector('.edit-btn').classList.add('hidden');
+            });
+        });
+
+        document.querySelectorAll('.save-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var row = this.closest('tr');
+                var descriptionCell = row.querySelector('.description');
+                var description = descriptionCell.querySelector('.edit-input').value;
+                var featureId = row.dataset.id;
+
+                fetch('{% url "feature_update_description" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({id: featureId, description: description})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        descriptionCell.querySelector('.desc-text').textContent = description;
+                        descriptionCell.querySelector('.desc-text').classList.remove('hidden');
+                        descriptionCell.querySelector('.edit-input').classList.add('hidden');
+                        descriptionCell.querySelector('.save-btn').classList.add('hidden');
+                        row.querySelector('.actions .edit-btn').classList.remove('hidden');
+                    } else {
+                        alert('Failed to update the description.');
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

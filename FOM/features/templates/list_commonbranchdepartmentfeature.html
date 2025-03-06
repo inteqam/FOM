@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Branch & Department Data Page</title>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #749FC7;
+            color: black;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header .navbar-brand {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease-in-out;
+        }
+
+        header nav ul li a:hover {
+            color: #333;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            padding-top: 100px; /* Space for header */
+            padding-bottom: 80px; /* Space for footer */
+            overflow-y: auto; /* Enable vertical scrolling for main content */
+        }
+
+        .tc {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+        }
+
+        .tc h1 {
+            color: #749FC7;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: calc(100% - 120px); /* Adjust input width to fit with label */
+        }
+
+        input[type="checkbox"] {
+            margin-left: 10px;
+        }
+
+        input[type="submit"],
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #749FC7;
+            color: white;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #5b87a1;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            flex-shrink: 0; /* Ensure footer does not shrink */
+            position: sticky; /* Keep the footer at the bottom */
+            bottom: 0; /* Stick the footer to the bottom */
+        }
+
+        footer .text-center {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            color: #f8f9fa;
+        }
+
+        footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        footer a:hover {
+            color: #adb5bd;
+        }
+    </style>
+  
+</head>
+
+<body>
+  <header>
+      <nav>
+          <a class="navbar-brand" href="#">Feature Operations</a>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'index' %}">Home</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'clients_list' %}">Clients</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'feature_list' %}">Features</a>
+                  </li>
+              </ul>
+          </div>
+      </nav>
+  </header>
+
+    <main>
+        <div class="tc">
+            <h1>List Common Branch and Department Feature</h1>
+
+      <table border="1" style="border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>Client Name</th>
+            <th>Branch Name</th>
+            <th>Department Name</th>
+            <th>Feature Name</th>
+            <th>Feature Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in result|dictsort:"client_name" %}
+          <tr>
+            <td>{{ item.client_name }}</td>
+            <td>{{ item.branch_name }}</td>
+            <td>{{ item.department_name }}</td>
+            <td>{{ item.feature_name }}</td>
+            <td>{{ item.feature_value }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+        </div>
+      
+    </main>
+
+    <footer>
+      <div class="text-center">&copy; 2025 Aditya Chaudhary</div>
+    </footer>
+  </body>
+</html>

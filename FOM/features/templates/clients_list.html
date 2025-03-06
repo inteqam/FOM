@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients List</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        header {
+            background-color: #749FC7;
+            color: black;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        header .navbar-brand {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+    
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+    
+        header nav ul li {
+            margin-right: 20px;
+        }
+    
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease-in-out;
+        }
+    
+        header nav ul li a:hover {
+            color: #333;
+        }
+    
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds viewport */
+        }
+    
+         
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+    
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+    
+        .alert {
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            z-index: 1000; /* Ensure it appears above other elements */
+            position: relative; /* Ensure it respects the z-index */
+        }
+    
+        .btn {
+            padding: 10px 20px;
+            background-color: #749FC7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+    
+        .btn:hover {
+            background-color: #5c89a6;
+        }
+    
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+            position: relative;
+            clear: both;
+            width: 100%;
+            flex-shrink: 0; /* Ensure footer does not shrink */
+        }
+    
+        footer .footer-wrapper {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+    
+        footer .footer-wrapper div {
+            flex: 1;
+            margin: 10px;
+        }
+    
+        footer .footer-wrapper h5 {
+            margin-top: 0;
+            color: #f8f9fa;
+        }
+    
+        footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+    
+        footer a:hover {
+            color: #adb5bd;
+        }
+    
+        .text-center {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            color: #f8f9fa;
+        }
+         /* Custom table styles */
+         table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        td:first-child, th:first-child {
+            padding-left: 20px; /* Adjust left padding for first column */
+        }
+        .btn {
+            display: none; /* Hide the Add Client button */
+        }
+        .edit-button {
+            background-color: #f0ad4e;
+        }
+        .edit-button:hover {
+            background-color: #eea236;
+        }
+
+    </style>
+    
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a class="navbar-brand" href="#">Feature Operations</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clients_list' %}">Clients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'feature_list' %}">Features</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Clients List</h1>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Active</th>
+                        <th>Lot Prefix</th>
+                        <th>Username Prefix Code</th>
+                        <th>Dispatch Date Freeze</th>
+                        <th>Formal Name</th>
+                        <!-- <th>Edit</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr>
+                        <td>{{ client.name }}</td>
+                        <td>{{ client.active }}</td>
+                        <td>{{ client.lot_prefix }}</td>
+                        <td>{{ client.username_prefix_code }}</td>
+                        <td>{{ client.dispatch_date_freeze }}</td>
+                        <td>{{ client.formal_name }}</td>
+                        <!-- <td>
+                            <a href="/edit_client/{{ client.id }}" class="btn edit-button">Edit</a>
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <!-- <div class="footer-wrapper">
+            <div>
+                <h5 class="text-uppercase">TechStile</h5>
+                <p>
+                    We wish to solve this problem and help this industry grow beyond what it is today.
+                    Our ERP systems are innovative, robust, reliable, and truly best in class, and we intend to enable businesses to simplify and organize this sector, thereby boosting operational efficiency, better supply chain management, and enabling organizations to grow their business further. We have firmly placed our intentions to solely help businesses grow.
+                </p>
+            </div>
+            <div>
+                <h5 class="text-uppercase">Links</h5>
+                <ul>
+                    <li><a href="{% url 'index' %}" class="text-dark">Home</a></li>
+                    <li><a href="{% url 'clients_list' %}" class="text-dark">Clients</a></li>
+                    <li><a href="{% url 'feature_list' %}" class="text-dark">Features</a></li>
+                </ul>
+            </div>
+        </div> -->
+        <div class="text-center" style="background-color: rgba(0, 0, 0, 0.2); padding: 10px; color: white;">
+            &copy; 2025 Aditya Chaudhary
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Items</title>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Global styles */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        header {
+            background-color: #749FC7;
+            color: black !important;
+            padding: 20px;
+        }
+
+        header .navbar-brand {
+            font-size: 2em;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: black;
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .form-group {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .form-group label {
+            margin-right: 10px;
+        }
+
+        .form-group select {
+            flex: 1;
+            padding: 8px;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .radio-group label {
+            margin-right: 10px;
+        }
+
+        .horizontal-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .horizontal-group .form-group {
+            flex: 1;
+            margin-right: 30px; /* Increased spacing */
+        }
+
+        .horizontal-group .form-group:last-child {
+            margin-right: 0; /* Remove margin from the last element */
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #d6d6d6;
+            padding: 20px;
+            text-align: center;
+            color: black !important;
+        }
+
+        footer .text-center {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a class="navbar-brand" href="#">TechStile</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clients_list' %}">Clients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'feature_list' %}">Features</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- <h1>Select Feature</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="feature">Feature:</label>
+                <select name="feature" id="feature" required>
+                    <option value="" selected disabled>Select a feature</option>
+                    {% for feature in features %}
+                        <option value="{{ feature.id }}" {% if selected_feature and selected_feature.id == feature.id %}selected{% endif %}>{{ feature.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form> -->
+
+        {% if selected_feature %}
+            <h2>Clients Table</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Default Value</th>
+                        <th>Selected Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td>{{ client.name }}</td>
+                            <td>{{ client.default_value }}</td>
+                            <td>{{ client.selected_value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h2>Branch & Department Table</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Department</th>
+                        <th>Default Value</th>
+                        <th>Selected Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for branch in branches %}
+                        <tr>
+                            <td>{{ branch.name }}</td>
+                            <td>{{ branch.department.name }}</td>
+                            <td>{{ branch.default_value }}</td>
+                            <td>{{ branch.selected_value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </main>
+
+    <footer>
+        <div class="text-center">© 2025 Aditya Chaudhary</div>
+    </footer>
+</body>
+</html>

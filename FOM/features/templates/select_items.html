@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Items</title>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Global styles */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        header {
+            background-color: #749FC7;
+            color: black !important;
+            padding: 20px;
+        }
+
+        header .navbar-brand {
+            font-size: 2em;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: black;
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .form-group {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .form-group label {
+            margin-right: 10px;
+        }
+
+        .form-group select {
+            flex: 1;
+            padding: 8px;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .radio-group label {
+            margin-right: 10px;
+        }
+
+        .horizontal-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .horizontal-group .form-group {
+            flex: 1;
+            margin-right: 30px; /* Increased spacing */
+        }
+
+        .horizontal-group .form-group:last-child {
+            margin-right: 0; /* Remove margin from the last element */
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #d6d6d6;
+            padding: 20px;
+            text-align: center;
+            color: black !important;
+        }
+
+        footer .text-center {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            color: white;
+        }
+    </style>
+    <script>
+        function showClientForm() {
+            var clientContainer = document.getElementById('client-container');
+            clientContainer.style.display = 'block';
+
+            var branchDeptContainer = document.getElementById('branch-dept-container');
+            branchDeptContainer.style.display = 'none';
+
+            var featuresContainer = document.getElementById('features-container');
+            featuresContainer.style.display = 'none';
+        }
+
+        function showBranchDeptForm() {
+            var clientContainer = document.getElementById('client-container');
+            clientContainer.style.display = 'none';
+
+            var branchDeptContainer = document.getElementById('branch-dept-container');
+            branchDeptContainer.style.display = 'block';
+
+            var featuresContainer = document.getElementById('features-container');
+            featuresContainer.style.display = 'none';
+        }
+
+        function showFeaturesForm() {
+            var clientContainer = document.getElementById('client-container');
+            clientContainer.style.display = 'none';
+
+            var branchDeptContainer = document.getElementById('branch-dept-container');
+            branchDeptContainer.style.display = 'none';
+
+            var featuresContainer = document.getElementById('features-container');
+            featuresContainer.style.display = 'block';
+        }
+
+        function submitForm() {
+            var selectedRadio = document.querySelector('input[name="selection"]:checked').value;
+            var url = '';
+
+            if (selectedRadio === 'client') {
+                // Handle client form submission
+                console.log('Submit client form');
+            } else if (selectedRadio === 'branch_dept') {
+                // Handle branch & department form submission
+                console.log('Submit branch & department form');
+            } else if (selectedRadio === 'features') {
+                // Handle features form submission
+                console.log('Submit features form');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var clientRadio = document.getElementById('client_radio');
+            var branchDeptRadio = document.getElementById('branch_dept_radio');
+            var featuresRadio = document.getElementById('features_radio');
+
+            clientRadio.addEventListener('change', showClientForm);
+            branchDeptRadio.addEventListener('change', showBranchDeptForm);
+            featuresRadio.addEventListener('change', showFeaturesForm);
+
+            // Initialize visibility based on initial radio state
+            if (clientRadio.checked) {
+                showClientForm();
+            } else if (branchDeptRadio.checked) {
+                showBranchDeptForm();
+            } else if (featuresRadio.checked) {
+                showFeaturesForm();
+            }
+
+            // Handle form submission
+            var form = document.querySelector('form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                submitForm();
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a class="navbar-brand" href="#">TechStile</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Clients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Select Client, Branch, Department, or Features</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="radio-group">
+                <label>Select Option:</label>
+                <div class="radio-group">
+                    <input type="radio" id="client_radio" name="selection" value="client" checked>
+                    <label for="client_radio">Client</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="branch_dept_radio" name="selection" value="branch_dept">
+                    <label for="branch_dept_radio">Branch & Department</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="features_radio" name="selection" value="features">
+                    <label for="features_radio">Features</label>
+                </div>
+            </div>
+
+            <div id="client-container" style="display: none;">
+                <div class="horizontal-group">
+                    <div class="form-group">
+                        <label for="client">Client:</label>
+                        <select name="client_id" id="client_id" required>
+                            <option value="" selected disabled>Select a client</option>
+                            <!-- Replace with actual options from Django template -->
+                        </select>
+                    </div>
+                </div>
+                <button type="submit">Submit</button>
+            </div>
+
+            <div id="branch-dept-container" style="display: none;">
+                <div class="horizontal-group">
+                    <div class="form-group">
+                        <label for="client">Client:</label>
+                        <select name="client_id" id="client_id" required>
+                            <option value="" selected disabled>Select a client</option>
+                            <!-- Replace with actual options from Django template -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="branch">Branch:</label>
+                        <select name="branch_id" id="branch_id" required>
+                            <option value="" selected disabled>Select a branch</option>
+                            <!-- Replace with actual options from Django template -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="department">Department:</label>
+                        <select name="department_id" id="department_id" required>
+                            <option value="" selected disabled>Select a department</option>
+                            <!-- Replace with actual options from Django template -->
+                        </select>
+                    </div>
+                </div>
+                <button type="submit">Submit</button>
+            </div>
+
+            <div id="features-container" style="display: none;">
+                <!-- Add form fields for features if needed -->
+                <button type="submit">Submit</button>
+            </div>
+
+            <!-- Uncomment the below submit button if you want a single submit button for all sections -->
+            <!-- <button type="submit">Submit</button> -->
+        </form>
+    </main>
+
+    <footer>
+        <div class="text-center">
+            &copy; 2025 Aditya Chaudhary
+        </div>
+    </footer>
+    <script>
+        const clientDict = JSON.parse('{{ client_dict|escapejs }}');
+        const branchDict = JSON.parse('{{ branch_dict|escapejs }}');
+
+        function updateBranchDepartment() {
+            const clientId = document.getElementById('client_id').value;
+            const branchSelect = document.getElementById('branch_id');
+
+            // Clear the existing branch options
+            branchSelect.innerHTML = '<option value="">Select a branch</option>';
+            document.getElementById('department_id').innerHTML = '<option value="">Select a department</option>'; // Clear departments
+
+            if (clientId && clientDict[clientId]) {
+                const branches = clientDict[clientId]['branches'];
+                branches.forEach(branch => {
+                    const option = document.createElement('option');
+                    option.value = branch.id;
+                    option.textContent = branch.branch_name;
+                    branchSelect.appendChild(option);
+                });
+            }
+        }
+
+        function updateDepartments() {
+            // const clientId = document.getElementById('client_id').value;
+            const branchId = document.getElementById('branch_id').value;
+            const departmentSelect = document.getElementById('department_id');
+
+            // Clear the existing department options
+            departmentSelect.innerHTML = '<option value="">Select a department</option>';
+
+            if (branchId && branchDict[branchId]) {
+                const departments = branchDict[branchId]['departments'];
+                // const branch = branches.find(branch => branch.id == branchId);
+                departments.forEach(department => {
+                    const option = document.createElement('option');
+                    option.value = department.id;
+                    option.textContent = department.department_name;
+                    departmentSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

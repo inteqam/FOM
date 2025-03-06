@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        header {
+            background-color: #749FC7;
+            color: black;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        header .navbar-brand {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+    
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+    
+        header nav ul li {
+            margin-right: 20px;
+        }
+    
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease-in-out;
+        }
+    
+        header nav ul li a:hover {
+            color: #333;
+        }
+    
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            transform: translateY(-50px);
+        }
+    
+        .container h1 {
+            margin-bottom: 20px;
+            color: #749FC7;
+        }
+    
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+    
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+    
+        .alert {
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            z-index: 1000; /* Ensure it appears above other elements */
+            position: relative; /* Ensure it respects the z-index */
+        }
+    
+        .btn {
+            padding: 10px 20px;
+            background-color: #749FC7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+    
+        .btn:hover {
+            background-color: #5c89a6;
+        }
+    
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            flex-shrink: 0; /* Ensure footer does not shrink */
+        }
+    
+        footer .footer-wrapper {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+    
+        footer .footer-wrapper div {
+            flex: 1;
+            margin: 10px;
+        }
+    
+        footer .footer-wrapper h5 {
+            margin-top: 0;
+            color: #f8f9fa;
+        }
+    
+        footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+    
+        footer a:hover {
+            color: #adb5bd;
+        }
+    
+        .text-center {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            color: #f8f9fa;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a class="navbar-brand" href="#">Feature Operations</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clients_list' %}">Clients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'feature_list' %}">Features</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Choose Option</h1>
+
+
+
+            <form method="post" action="{% url 'index' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <select name="choice" id="choice" class="form-control">
+                        <option value="default">Select an option</option>
+                        <option value="1">Register New Client</option>
+                        <option value="2">Insert New Feature</option>
+                        <option value="3">Subscribe a Feature for Client</option>
+                        <option value="4">Subscribe Feature for Branch Department</option>
+                        <option value="5">Unsubscribe a Feature</option>
+                        <option value="6">Refresh Feature</option>
+                        <option value="7">View Features</option>
+                    </select>
+                </div>
+                {% if error %}
+                <div class="alert alert-danger">
+                    Please select a valid option.
+                </div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+            {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+        </div>
+        
+    </main>
+    
+    <footer>
+        <!-- <div class="footer-wrapper">
+            <div>
+                <h5 class="text-uppercase">TechStile</h5>
+                <p>
+                      We wish to solve this problem and help this industry grow beyond what it is today.
+                    Our ERP systems are innovative, robust, reliable, and truly best in class, and we intend to enable businesses to simplify and organize this sector, thereby boosting operational efficiency, better supply chain management, and enabling organizations to grow their business further. We have firmly placed our intentions to solely help businesses grow.
+                </p>
+            </div>
+            <div>
+                <h5 class="text-uppercase">Links</h5>
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'clients_list' %}">Clients</a></li>
+                    <li><a href="{% url 'feature_list' %}">Features</a></li>
+                </ul>
+            </div>
+        </div> -->
+        <div class="text-center">
+            &copy; 2025 Aditya Chaudhary
+        </div>
+    </footer>
+    
+</body>
+
+</html>

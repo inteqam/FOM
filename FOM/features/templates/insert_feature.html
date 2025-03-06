@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+    }
+
+    header {
+        background-color: #749FC7;
+        color: black;
+        padding: 15px 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header .navbar-brand {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: black;
+        text-decoration: none;
+    }
+
+    header nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    header nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+    }
+
+    header nav ul li {
+        margin-right: 20px;
+    }
+
+    header nav ul li a {
+        color: black;
+        text-decoration: none;
+        font-size: 1.1em;
+        transition: color 0.3s ease-in-out;
+    }
+
+    header nav ul li a:hover {
+        color: #333;
+    }
+
+    main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto; /* Enable vertical scrolling if content exceeds viewport */
+    }
+
+     
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    .alert {
+        padding: 15px;
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        z-index: 1000; /* Ensure it appears above other elements */
+        position: relative; /* Ensure it respects the z-index */
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #749FC7;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        background-color: #5c89a6;
+    }
+
+    footer {
+        background-color: #343a40;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+        margin-top: auto;
+        position: relative;
+        clear: both;
+        width: 100%;
+        flex-shrink: 0; /* Ensure footer does not shrink */
+    }
+
+    footer .footer-wrapper {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        padding: 20px;
+    }
+
+    footer .footer-wrapper div {
+        flex: 1;
+        margin: 10px;
+    }
+
+    footer .footer-wrapper h5 {
+        margin-top: 0;
+        color: #f8f9fa;
+    }
+
+    footer a {
+        color: #f8f9fa;
+        text-decoration: none;
+        transition: color 0.3s ease-in-out;
+    }
+
+    footer a:hover {
+        color: #adb5bd;
+    }
+
+    .text-center {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        color: #f8f9fa;
+    }
+     /* Custom table styles */
+     table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    td:first-child, th:first-child {
+        padding-left: 20px; /* Adjust left padding for first column */
+    }
+    .btn {
+        display: none; /* Hide the Add Client button */
+    }
+    .edit-button {
+        background-color: #f0ad4e;
+    }
+    .edit-button:hover {
+        background-color: #eea236;
+    }
+
+</style>
+
+    <div class="feature-container">
+        <div class="feature-buttons">
+            <button type="button" id="blankPageBtn">Feature Operations</button>
+            <button type="button" id="featureOpsBtn">Feature Description Update</button>
+        </div>
+        <button id="refreshBtn" onclick="window.location.reload();"><i class="fas fa-sync-alt"></i></button>
+    </div>
+
+    <div class="table-wrapper">
+        <form method="POST" action="{% url 'insert_feature_url' %}">
+            {% csrf_token %}
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Default Value</th>
+                        <th>Value Type</th>
+                        <th>Description</th>
+                        <th>Actions</th> <!-- Remove the 'hidden' class -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="name" class="form-control"></td>
+                        <td><input type="text" name="default_value" class="form-control"></td>
+                        <td><input type="text" name="value_type" class="form-control"></td>
+                        <td><input type="text" name="description" class="form-control"></td>
+                        <td>
+                            <button type="submit" class="btn btn-primary btn-sm">Insert</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <footer>
+        <!-- Footer content here -->
+    </footer>
+
+    <script>
+        document.getElementById('featureOpsBtn').addEventListener('click', function() {
+            var actionCells = document.querySelectorAll('.actions');
+            actionCells.forEach(function(cell) {
+                cell.classList.toggle('hidden');
+            });
+            this.classList.toggle('active');
+        });
+
+        document.getElementById('blankPageBtn').addEventListener('click', function() {
+            window.location.href = '{% url "blank_page_url" %}';
+        });
+    </script>
+
+{% endblock %}

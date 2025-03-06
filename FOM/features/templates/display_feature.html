@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Select Items</title>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #749FC7;
+            color: black;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header .navbar-brand {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease-in-out;
+        }
+
+        header nav ul li a:hover {
+            color: #333;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            padding-top: 100px; /* Space for header */
+            padding-bottom: 80px; /* Space for footer */
+            overflow-y: auto; /* Enable vertical scrolling for main content */
+        }
+
+        .tc {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+        }
+
+        .tc h1 {
+            color: #749FC7;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: calc(100% - 120px); /* Adjust input width to fit with label */
+        }
+
+        input[type="checkbox"] {
+            margin-left: 10px;
+        }
+
+        input[type="submit"],
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #749FC7;
+            color: white;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #5b87a1;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            flex-shrink: 0; /* Ensure footer does not shrink */
+            position: sticky; /* Keep the footer at the bottom */
+            bottom: 0; /* Stick the footer to the bottom */
+        }
+
+        footer .text-center {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            color: #f8f9fa;
+        }
+
+        footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        footer a:hover {
+            color: #adb5bd;
+        }
+    </style>
+    <script>
+        function toggleVisibility() {
+            var clientRadio = document.getElementById('client_radio');
+            var branchDeptRadio = document.getElementById('branch_dept_radio');
+            var featureRadio = document.getElementById('feature_radio');
+            var clientForm = document.getElementById('client_form');
+            var branchDeptForm = document.getElementById('branch_dept_form');
+            var featureForm = document.getElementById('feature_form');
+
+            clientForm.style.display = 'none';
+            branchDeptForm.style.display = 'none';
+            featureForm.style.display = 'none';
+
+            if (clientRadio.checked) {
+                clientForm.style.display = 'block';
+            } else if (branchDeptRadio.checked) {
+                branchDeptForm.style.display = 'block';
+            } else if (featureRadio.checked) {
+                featureForm.style.display = 'block';
+            }
+
+            // Update the hidden input value for model name
+            updateModelName(clientRadio.value, branchDeptRadio.value, featureRadio.value);
+        }
+
+        function updateModelName(clientValue, branchDeptValue, featureValue) {
+            var clientFormModel = document.getElementById('client_form_model_name');
+            var branchDeptFormModel = document.getElementById('branch_dept_form_model_name');
+            var featureFormModel = document.getElementById('feature_form_model_name');
+
+            if (document.getElementById('client_radio').checked) {
+                clientFormModel.value = clientValue;
+            } else if (document.getElementById('branch_dept_radio').checked) {
+                branchDeptFormModel.value = branchDeptValue;
+            } else if (document.getElementById('feature_radio').checked) {
+                featureFormModel.value = featureValue;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var radioButtons = document.querySelectorAll('input[name="model_name"]');
+            radioButtons.forEach(function (radio) {
+                radio.addEventListener('change', toggleVisibility);
+            });
+
+            // Initialize visibility
+            toggleVisibility();
+        });
+
+        const clientDict = JSON.parse('{{ client_dict|escapejs }}');
+        const branchDict = JSON.parse('{{ branch_dict|escapejs }}');
+
+        function updateBranchDepartment() {
+            const clientId = document.getElementById('bnd_client_id').value;
+            const branchSelect = document.getElementById('branch_id');
+
+            console.log("Selected Client ID:", clientId);
+            console.log("Client Data:", clientDict[clientId]);
+
+            // Clear the existing branch options
+            branchSelect.innerHTML = '<option value="">Select a branch</option>';
+            document.getElementById('department_id').innerHTML = '<option value="">Select a department</option>'; // Clear departments
+
+            if (clientId && clientDict[clientId]) {
+                const branches = clientDict[clientId]['branches'];
+                branches.forEach(branch => {
+                    const option = document.createElement('option');
+                    option.value = branch.id;
+                    option.textContent = branch.branch_name;
+                    branchSelect.appendChild(option);
+                });
+            }
+        }
+
+        function updateDepartments() {
+            // const clientId = document.getElementById('client_id').value;
+            const branchId = document.getElementById('branch_id').value;
+            const departmentSelect = document.getElementById('department_id');
+
+            console.log("Selected Branch ID:", branchId);
+            console.log("Branch Data:", branchDict[branchId]);
+
+            // Clear the existing department options
+            departmentSelect.innerHTML = '<option value="">Select a department</option>';
+
+            if (branchId && branchDict[branchId]) {
+                const departments = branchDict[branchId]['departments'];
+                // const branch = branches.find(branch => branch.id == branchId);
+                departments.forEach(department => {
+                    const option = document.createElement('option');
+                    option.value = department.id;
+                    option.textContent = department.department_name;
+                    departmentSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a class="navbar-brand" href="#">Feature Operations</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clients_list' %}">Clients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'feature_list' %}">Features</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="tc">
+            <h1>Select Client, Branch, and Department</h1>
+
+            <form id="radio_form" style="margin-bottom: 20px;">
+                <div class="radio-group">
+                    <label>Client<input type="radio" id="client_radio" name="model_name" value="CommonClientFeature" checked> </label>
+                </div>
+                <div class="radio-group">
+                    <label>Branch & Department<input type="radio" id="branch_dept_radio" name="model_name" value="CommonBranchDepartmentFeature"></label>
+                </div>
+                <div class="radio-group">
+                    <label>Feature Description<input type="radio" id="feature_radio" name="model_name" value="CommonFeature"></label>
+                </div>
+            </form>
+
+            <form id="client_form" method="post" action="{% url 'display_feature' %}" style="display: none;">
+                {% csrf_token %}
+                <input type="hidden" name="model_name" id="client_form_model_name" value="CommonClientFeature">
+                <div class="form-group">
+                    <label for="client">Client:</label>
+                    <select name="client_id" id="client_id" required>
+                        <option value="" selected disabled>Select a client</option>
+                        {% for client in clients %}
+                            <option value="{{ client.id }}">{{ client.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" name="display_feature">Submit</button>
+            </form>
+
+            <form id="branch_dept_form" method="post" action="{% url 'display_feature' %}" style="display: none;">
+                {% csrf_token %}
+                <input type="hidden" name="model_name" id="branch_dept_form_model_name" value="CommonBranchDepartmentFeature">
+                <div class="form-group">
+                    <label for="bnd_client_id">Client:</label>
+                    <select name="bnd_client_id" id="bnd_client_id" required onchange="updateBranchDepartment()">
+                        <option value="" selected disabled>Select a client</option>
+                        {% for client in clients %}
+                            <option value="{{ client.id }}">{{ client.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="branch_id">Branch:</label>
+                    <select name="branch_id" id="branch_id" required onchange="updateDepartments()">
+                        <option value="" selected disabled>Select a branch</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="department_id">Department:</label>
+                    <select name="department_id" id="department_id" required>
+                        <option value="" selected disabled>Select a department</option>
+                    </select>
+                </div>
+                <button type="submit" name="display_feature">Submit</button>
+            </form>
+
+            <form id="feature_form" method="post" action="{% url 'display_feature' %}" style="display: none;">
+                {% csrf_token %}
+                <input type="hidden" name="model_name" id="feature_form_model_name" value="CommonFeature">
+                <div class="form-group">
+                    <label for="feature_name">Feature Name:</label>
+                    <select id="feature_name" name="feature_name" required>
+                        <option value="" selected disabled>Select a feature</option>
+                        {% for feature in features %}
+                            <option value="{{ feature.name }}">{{ feature.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" name="display_feature">Submit</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="text-center">
+            &copy; 2025 Aditya Chaudhary
+        </div>
+    </footer>
+</body>
+</html>

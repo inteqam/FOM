@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Client</title>
+</head>
+<body>
+    <h1>Add Client</h1>
+    <form method="post" action="{% url 'add_client' %}">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="active">Active:</label>
+        <input type="checkbox" id="active" name="active"><br><br>
+
+        <label for="lot_prefix">Lot Prefix:</label>
+        <input type="text" id="lot_prefix" name="lot_prefix" required><br><br>
+
+        <label for="username_prefix_code">Username Prefix Code:</label>
+        <input type="text" id="username_prefix_code" name="username_prefix_code" required><br><br>
+
+        <label for="dispatch_date_freeze">Dispatch Date Freeze:</label>
+        <input type="date" id="dispatch_date_freeze" name="dispatch_date_freeze" required><br><br>
+
+        <label for="formal_name">Formal Name:</label>
+        <input type="text" id="formal_name" name="formal_name" required><br><br>
+
+        <input type="submit" value="Add Client">
+    </form>
+</body>
+</html>
